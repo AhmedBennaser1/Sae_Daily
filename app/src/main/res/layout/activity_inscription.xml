@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="16dp"
+    android:layout_gravity="center"
+    tools:context=".inscription">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:padding="16dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/daily_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/amaranth"
+            android:gravity="center"
+            android:text="Daily"
+            android:textColor="#FFB300"
+            android:textSize="48sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/form_border"
+            android:padding="16dp"
+            android:gravity="center"
+            android:elevation="4dp"
+            android:layout_marginTop="16dp"
+            android:weightSum="1"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/inscription_legend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inscription"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="16dp"
+                android:layout_gravity="center"
+                android:background="@android:color/white"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Full Name"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:drawableStart="@drawable/ic_person"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"
+                android:background="#F2F2F2"/>
+
+            <EditText
+                android:id="@+id/mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email Address"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:drawableStart="@drawable/ic_email"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"
+                android:background="#F2F2F2"/>
+
+            <EditText
+                android:id="@+id/pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:drawableStart="@drawable/ic_lock"
+                android:layout_marginBottom="16dp"
+                android:background="#F2F2F2"/>
+
+            <EditText
+                android:id="@+id/cpasswd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:drawableStart="@drawable/ic_lock"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"
+                android:background="#F2F2F2"/>
+
+            <EditText
+                android:id="@+id/phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:drawableStart="@drawable/phone"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"
+                android:background="#F2F2F2"/>
+
+            <EditText
+                android:id="@+id/age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Age"
+                android:inputType="number"
+                android:minHeight="48dp"
+                android:padding="12dp"
+                android:drawableStart="@drawable/age"
+                android:textSize="16sp"
+                android:layout_marginBottom="32dp"
+                android:background="#F2F2F2"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/inscri"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S'inscrire"
+                    android:textSize="16sp"
+                    android:textColor="#FFB300"
+                    android:backgroundTint="#6750a4"
+                    android:onClick="onregister"
+                    android:layout_marginEnd="8dp"/>
+
+                <Button
+                    android:id="@+id/login"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Connexion"
+                    android:textSize="16sp"
+                    android:textColor="#FFB300"
+                    android:backgroundTint="#6750a4"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
