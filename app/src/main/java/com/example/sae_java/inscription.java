@@ -153,6 +153,8 @@ public class inscription extends AppCompatActivity {
             alertDialog = new AlertDialog.Builder(context).create();
             alertDialog.setTitle("Status");
             alertDialog.setMessage("Registering...");
+            Intent i=new Intent(context,MainActivity.class);
+            context.startActivity(i);
         }
 
         @Override

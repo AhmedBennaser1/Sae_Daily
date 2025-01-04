@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -63,7 +64,13 @@ public class addcom extends AppCompatActivity {
             String mailprof = userObject.getString("email");
             String img = userObject.getString("img");
 
-            Glide.with(addcom.this).load(img).into(imgglide);
+
+            if(!img.toString().isEmpty()) {
+                Glide.with(addcom.this).load(img).into(imgglide);
+            }
+            else{
+                Glide.with(addcom.this).load(R.drawable.user_default).into(imgglide);
+            }
 
             mail.setText(mailprof);
             username.setText(name);
@@ -104,12 +111,7 @@ public class addcom extends AppCompatActivity {
                 String title = params[2];
                 String description = params[3];
 
-                String urlWithParams = com_url + "?url=" + URLEncoder.encode(lien, "UTF-8")
-                        + "&titre=" + URLEncoder.encode(description, "UTF-8")
-                        + "&descrip=" + URLEncoder.encode(title, "UTF-8")
-                        + "&imgurl=" + URLEncoder.encode(img, "UTF-8");
-
-                return executeHttpRequest(urlWithParams);
+                return executeHttpRequest(com_url, lien, img, title, description);
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -120,26 +122,47 @@ public class addcom extends AppCompatActivity {
             }
         }
 
-        private String executeHttpRequest(String urlWithParams) throws IOException {
-            URL url = new URL(urlWithParams);
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setDoInput(true);
+        private String executeHttpRequest(String urlString, String lien, String img, String title, String description) throws IOException {
+            HttpURLConnection httpURLConnection = null;
+            BufferedReader reader = null;
 
-            InputStream inputStream = httpURLConnection.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-            StringBuilder result = new StringBuilder();
-            String line;
+            try {
+                URL url = new URL(urlString);
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-            while ((line = bufferedReader.readLine()) != null) {
-                result.append(line);
+                String postData = "url=" + URLEncoder.encode(lien, "UTF-8")
+                        + "&titre=" + URLEncoder.encode(title, "UTF-8")
+                        + "&descrip=" + URLEncoder.encode(description, "UTF-8")
+                        + "&imgurl=" + URLEncoder.encode(img, "UTF-8");
+
+                // Send POST data
+                DataOutputStream writer = new DataOutputStream(httpURLConnection.getOutputStream());
+                writer.writeBytes(postData);
+                writer.flush();
+                writer.close();
+
+                InputStream inputStream = httpURLConnection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                StringBuilder result = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    result.append(line);
+                }
+
+                return result.toString();
+            } finally {
+                if (httpURLConnection != null) {
+                    httpURLConnection.disconnect();
+                }
+                if (reader != null) {
+                    reader.close();
+                }
             }
-
-            bufferedReader.close();
-            inputStream.close();
-            httpURLConnection.disconnect();
-
-            return result.toString();
         }
 
         @Override
@@ -148,7 +171,6 @@ public class addcom extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            // Show an alert dialog to indicate success or failure
             AlertDialog alertDialog = new AlertDialog.Builder(addcom.this).create();
             alertDialog.setTitle("Journee added successfully");
             alertDialog.setMessage(result);
@@ -184,7 +206,6 @@ public class addcom extends AppCompatActivity {
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-            // Optionally, update UI to show progress
         }
     }
 }

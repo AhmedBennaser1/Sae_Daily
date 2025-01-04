@@ -75,7 +75,13 @@ public class acceuil extends AppCompatActivity {
             String user = userObject.getString("name");
             String img = userObject.getString("img");
 
-            Glide.with(acceuil.this).load(img).into(profile);
+            if(!img.toString().isEmpty()) {
+                Glide.with(acceuil.this).load(img).into(profile);
+            }
+            else{
+                Glide.with(acceuil.this).load(R.drawable.user_default).into(profile);
+            }
+
 
             username.setText(user);
 

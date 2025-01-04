@@ -10,6 +10,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,10 +35,7 @@ class LoginsValid extends AsyncTask<String, Void, String> {
             String email = params[0];
             String password = params[1];
 
-            String urlWithParams = login_url + "?email=" + URLEncoder.encode(email, "UTF-8")
-                    + "&password=" + URLEncoder.encode(password, "UTF-8");
-
-            return executeHttpRequest(urlWithParams);
+            return executeHttpRequest(login_url, email, password);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return "MalformedURLException: " + e.getMessage();
@@ -47,14 +45,24 @@ class LoginsValid extends AsyncTask<String, Void, String> {
         }
     }
 
-    private String executeHttpRequest(String urlWithParams) throws IOException {
+    private String executeHttpRequest(String urlString, String email, String password) throws IOException {
         HttpURLConnection httpURLConnection = null;
         BufferedReader reader = null;
         try {
-            URL url = new URL(urlWithParams);
+            URL url = new URL(urlString);
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
+            httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            String postData = "email=" + URLEncoder.encode(email, "UTF-8") +
+                    "&password=" + URLEncoder.encode(password, "UTF-8");
+
+            DataOutputStream writer = new DataOutputStream(httpURLConnection.getOutputStream());
+            writer.writeBytes(postData);
+            writer.flush();
+            writer.close();
 
             InputStream inputStream = httpURLConnection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
@@ -90,17 +98,22 @@ class LoginsValid extends AsyncTask<String, Void, String> {
         alertDialog.dismiss();
 
         try {
-            JSONObject jsonResponse = new JSONObject(result);
-            String status = jsonResponse.optString("status");
+            if (result.startsWith("{") && result.endsWith("}")) {
+                JSONObject jsonResponse = new JSONObject(result);
+                String status = jsonResponse.optString("status");
 
-            if ("success".equalsIgnoreCase(status)) {
-                Intent i = new Intent(context, acceuil.class);
-                i.putExtra("json_data", result);
-                context.startActivity(i);
-                Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show();
+                if ("success".equalsIgnoreCase(status)) {
+                    Intent i = new Intent(context, acceuil.class);
+                    i.putExtra("json_data", result);
+                    context.startActivity(i);
+                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show();
+                } else {
+                    String message = jsonResponse.optString("message");
+                    alertDialog.setMessage("Login failed: " + message);
+                    alertDialog.show();
+                }
             } else {
-                String message = jsonResponse.optString("message");
-                alertDialog.setMessage("Login failed: " + message);
+                alertDialog.setMessage( result);
                 alertDialog.show();
             }
         } catch (Exception e) {

@@ -61,8 +61,12 @@ public class profile extends AppCompatActivity {
             String name = userObject.getString("name");
             String mailprof = userObject.getString("email");
             String img = userObject.getString("img");
-
-            Glide.with(profile.this).load(img).into(imgglide);
+            if(!img.toString().isEmpty()) {
+                Glide.with(profile.this).load(img).into(imgglide);
+            }
+            else{
+                Glide.with(profile.this).load(R.drawable.user_default).into(imgglide);
+            }
 
             mail.setText(mailprof);
             username.setText(name);
