@@ -1,8 +1,8 @@
 package com.example.sae_java;
+
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import android.graphics.drawable.Drawable;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -19,8 +19,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-
 import androidx.appcompat.widget.Toolbar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,44 +28,41 @@ import org.json.JSONObject;
 public class acceuil extends AppCompatActivity {
     private Toolbar toolbar;
     LinearLayout scroll;
-    Button  commmentaire;
+    Button commentaire;
     EditText username;
+    ImageView profile, com;
 
-    ImageView profile,com;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acceuil);
-        commmentaire=findViewById(R.id.sentcom);
-        profile=findViewById(R.id.account);
+
+        commentaire = findViewById(R.id.sentcom);
+        profile = findViewById(R.id.account);
         scroll = findViewById(R.id.content);
-        username=findViewById(R.id.nameacceuil);
-        toolbar=findViewById(R.id.toolbar);
-        com=findViewById(R.id.acom);
+        username = findViewById(R.id.nameacceuil);
+        toolbar = findViewById(R.id.toolbar);
+        com = findViewById(R.id.acom);
         setSupportActionBar(toolbar);
 
-
         String jsonData = getIntent().getStringExtra("json_data");
+
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Intent i = new Intent(acceuil.this, profile.class);
                 i.putExtra("json_data", jsonData);
                 startActivity(i);
-
             }
-
         });
+
         com.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Intent i = new Intent(acceuil.this, addcom.class);
                 i.putExtra("json_data", jsonData);
-
                 startActivity(i);
-
             }
-
         });
 
         try {
@@ -75,21 +72,17 @@ public class acceuil extends AppCompatActivity {
             String user = userObject.getString("name");
             String img = userObject.getString("img");
 
-            if(!img.toString().isEmpty()) {
+            if (!img.toString().isEmpty()) {
                 Glide.with(acceuil.this).load(img).into(profile);
-            }
-            else{
+            } else {
                 Glide.with(acceuil.this).load(R.drawable.user_default).into(profile);
             }
-
 
             username.setText(user);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
 
         try {
             JSONObject image = new JSONObject(jsonData);
@@ -113,7 +106,6 @@ public class acceuil extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         if (jsonData != null) {
             try {
                 JSONObject jsonResponse = new JSONObject(jsonData);
@@ -128,7 +120,7 @@ public class acceuil extends AppCompatActivity {
                         String titre = new String(data.optString("titre").getBytes("ISO-8859-1"), "UTF-8");
                         String description = new String(data.optString("description").getBytes("ISO-8859-1"), "UTF-8");
                         String link = new String(data.optString("lien").getBytes("ISO-8859-1"), "UTF-8");
-                        String date =new String(data.optString("date").getBytes("ISO_8859_1"),"UTF-8");
+                        String date = new String(data.optString("date").getBytes("ISO_8859_1"), "UTF-8");
                         String imageLink = data.optString("image_link");
 
                         LinearLayout layout = new LinearLayout(this);
@@ -156,7 +148,6 @@ public class acceuil extends AppCompatActivity {
                                 1
                         ));
 
-
                         ImageView image = new ImageView(this);
                         LinearLayout.LayoutParams imageLayoutParams = new LinearLayout.LayoutParams(
                                 320, 200
@@ -166,7 +157,6 @@ public class acceuil extends AppCompatActivity {
                         image.setLayoutParams(imageLayoutParams);
 
                         Glide.with(this).load(imageLink).into(image);
-
 
                         LinearLayout buttonsLayout = new LinearLayout(this);
                         buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -198,14 +188,30 @@ public class acceuil extends AppCompatActivity {
                         dislikeButtonParams.weight = 1;
                         dislikeButton.setLayoutParams(dislikeButtonParams);
 
+                        // Set unique tags for each like/dislike button based on the index
+                        likeButton.setTag(i); // Set index as the tag
+                        dislikeButton.setTag(i); // Set index as the tag
+
+                        // Handle like button click
                         likeButton.setOnClickListener(view -> {
-                            likeButton.setBackgroundResource(R.drawable.like_selected);
-                            dislikeButton.setBackgroundResource(R.drawable.dislike);
+                            int index = (int) view.getTag(); // Get index from the tag
+                            Button currentLike = (Button) view;
+                            Button currentDislike = findViewWithTag(dislikeButton.getTag());
+
+                            // Update like/dislike states
+                            currentLike.setBackgroundResource(R.drawable.like_selected);
+                            currentDislike.setBackgroundResource(R.drawable.dislike);
                         });
 
+                        // Handle dislike button click
                         dislikeButton.setOnClickListener(view -> {
-                            dislikeButton.setBackgroundResource(R.drawable.dislike_selected);
-                            likeButton.setBackgroundResource(R.drawable.like);
+                            int index = (int) view.getTag(); // Get index from the tag
+                            Button currentDislike = (Button) view;
+                            Button currentLike = findViewWithTag(likeButton.getTag());
+
+                            // Update like/dislike states
+                            currentDislike.setBackgroundResource(R.drawable.dislike_selected);
+                            currentLike.setBackgroundResource(R.drawable.like);
                         });
 
                         buttonsLayout.addView(likeButton);
@@ -243,11 +249,9 @@ public class acceuil extends AppCompatActivity {
                         });
 
                         TextView date2 = new TextView(this);
-                        date2.setText("date: "+date);
+                        date2.setText("date: " + date);
                         date2.setTextSize(10);
                         moreinfo.setPadding(0, 3, 0, 0);
-
-
 
                         textLayout.addView(titrescroll);
                         textLayout.addView(descriptionscroll);
@@ -266,10 +270,14 @@ public class acceuil extends AppCompatActivity {
         }
     }
 
+    private Button findViewWithTag(Object tag) {
+        return (Button) scroll.findViewWithTag(tag);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 }
