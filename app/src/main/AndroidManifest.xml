@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Sae_java"
         tools:targetApi="34">
         <activity
+            android:name=".favorite"
+            android:exported="false" />
+        <activity
             android:name=".addcom"
             android:exported="false" />
         <activity

@@ -88,10 +88,10 @@ public class profile extends AppCompatActivity {
             public void onClick(View view) {
                 if (!nfname.getText().toString().isEmpty()) {
                     String fname = nfname.getText().toString();
-                    new UpdateProfile().execute("logout", fname);
+                    new update().execute("logout", fname);
                 } else {
                     String fname = username.getText().toString();
-                    new UpdateProfile().execute("logout", fname);
+                    new update().execute("logout", fname);
                 }
                 Intent i = new Intent(profile.this, MainActivity.class);
                 startActivity(i);
@@ -111,12 +111,12 @@ public class profile extends AppCompatActivity {
                 String oemail = mail.getText().toString();
                 String img = imgurl.getText().toString();
 
-                new UpdateProfile().execute("update", oemail, opassword, npassword, cpassword, fname, nphone, age, email, img);
+                new update().execute("update", oemail, opassword, npassword, cpassword, fname, nphone, age, email, img);
             }
         });
     }
 
-    private class UpdateProfile extends AsyncTask<String, Void, String> {
+    private class update extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
@@ -209,7 +209,7 @@ public class profile extends AppCompatActivity {
 
             if (result.equals("Update successful")) {
                 String fname = !nfname.getText().toString().isEmpty() ? nfname.getText().toString() : username.getText().toString();
-                new UpdateProfile().execute("logout", fname);
+                new update().execute("logout", fname);
                 Intent i = new Intent(profile.this, MainActivity.class);
                 startActivity(i);
             }
