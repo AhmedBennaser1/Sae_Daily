@@ -37,7 +37,6 @@ public class profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         back = findViewById(R.id.homecom);
         logout = findViewById(R.id.logoutpro);
         imgglide = findViewById(R.id.profilepic);
@@ -82,6 +81,7 @@ public class profile extends AppCompatActivity {
                 startActivity(home);
             }
         });
+
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
