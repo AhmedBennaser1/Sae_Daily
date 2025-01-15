@@ -1,6 +1,6 @@
 ## Ce projet Android a été développé en utilisant les technologies et outils suivants :
 
-*   **Gestion de la base de données :** phpMyAdmin (pour l'administration de la base de données). Il est important de noter que phpMyAdmin est un outil d'administration et non une base de données en elle-même. Veuillez préciser le système de gestion de base de données (SGBD) utilisé (par exemple, MySQL, MariaDB).
+*   **Gestion de la base de données :** phpMyAdmin (pour l'administration de la base de données).
 
 *   **Langage de programmation :** Java avec JDK 17.
 
@@ -13,7 +13,7 @@
 
 **Remarques importantes :**
 
-*   **Base de données :** MySQL (administrée via phpMyAdmin)".
+*   **Base de données :** MySQL (administrée via phpMyAdmin).
 *   **Environnement de développement intégré (IDE) :**  Android Studio Giraffe 2022.3.1 Correctif 2
 
 ## Comment installer l'application sur votre appareil android
