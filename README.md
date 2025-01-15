@@ -1,6 +1,4 @@
-![image](https://github.com/user-attachments/assets/c8d81389-36e4-40a3-9a60-cf327ec82ce2)## Ressources utilisées pour le projet
-
-Ce projet Android a été développé en utilisant les technologies et outils suivants :
+## Ce projet Android a été développé en utilisant les technologies et outils suivants :
 
 *   **Gestion de la base de données :** phpMyAdmin (pour l'administration de la base de données). Il est important de noter que phpMyAdmin est un outil d'administration et non une base de données en elle-même. Veuillez préciser le système de gestion de base de données (SGBD) utilisé (par exemple, MySQL, MariaDB).
 
