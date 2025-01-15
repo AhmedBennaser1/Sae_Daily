@@ -1,56 +1,53 @@
     package com.example.sae_java;
-            import com.bumptech.glide.request.target.SimpleTarget;
-            import com.bumptech.glide.request.transition.Transition;
+    import com.bumptech.glide.request.target.SimpleTarget;
+    import com.bumptech.glide.request.transition.Transition;
 
-            import android.app.AlertDialog;
-            import android.graphics.Typeface;
-            import android.graphics.drawable.Drawable;
+    import android.app.AlertDialog;
+    import android.graphics.drawable.Drawable;
 
-            import android.content.Intent;
-            import android.graphics.Color;
-            import android.net.Uri;
-            import android.os.AsyncTask;
-            import android.os.Bundle;
-            import android.util.Log;
-            import android.view.Menu;
-            import android.view.MenuInflater;
-            import android.view.View;
-            import android.widget.Button;
-            import android.widget.EditText;
-            import android.widget.ImageView;
-            import android.widget.LinearLayout;
-            import android.widget.TextView;
+    import android.content.Intent;
+    import android.graphics.Color;
+    import android.net.Uri;
+    import android.os.AsyncTask;
+    import android.os.Bundle;
+    import android.view.Menu;
+    import android.view.MenuInflater;
+    import android.view.View;
+    import android.widget.Button;
+    import android.widget.EditText;
+    import android.widget.ImageView;
+    import android.widget.LinearLayout;
+    import android.widget.TextView;
 
-            import androidx.appcompat.app.AppCompatActivity;
+    import androidx.appcompat.app.AppCompatActivity;
 
-            import com.bumptech.glide.Glide;
+    import com.bumptech.glide.Glide;
 
-            import androidx.appcompat.widget.Toolbar;
-            import org.json.JSONArray;
-            import org.json.JSONException;
-            import org.json.JSONObject;
+    import androidx.appcompat.widget.Toolbar;
+    import org.json.JSONArray;
+    import org.json.JSONException;
+    import org.json.JSONObject;
 
-            import java.io.BufferedReader;
-            import java.io.IOException;
-            import java.io.InputStream;
-            import java.io.InputStreamReader;
-            import java.io.OutputStream;
-            import java.net.HttpURLConnection;
-            import java.net.MalformedURLException;
-            import java.net.URL;
-            import java.net.URLEncoder;
-            import java.util.ArrayList;
-            import java.util.List;
+    import java.io.BufferedReader;
+    import java.io.IOException;
+    import java.io.InputStream;
+    import java.io.InputStreamReader;
+    import java.io.OutputStream;
+    import java.net.HttpURLConnection;
+    import java.net.MalformedURLException;
+    import java.net.URL;
+    import java.net.URLEncoder;
+    import java.util.ArrayList;
+    import java.util.List;
 
     public class acceuil extends AppCompatActivity {
         private Toolbar toolbar;
-        LinearLayout scroll,scroll2;
+        LinearLayout scroll;
         Button  commmentaire;
-        EditText username,comsent;
+        EditText username;
 
         ImageView profile,com,favoritee;
         ArrayList<String> resultlist;
-        String jsonData;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
 
@@ -64,12 +61,11 @@
             username=findViewById(R.id.nameacceuil);
             toolbar=findViewById(R.id.toolbar);
             com=findViewById(R.id.acom);
-            comsent=findViewById(R.id.editTextText);
-            scroll2=findViewById(R.id.content_com);
             setSupportActionBar(toolbar);
 
 
-            jsonData = getIntent().getStringExtra("json_data");
+            String jsonData = getIntent().getStringExtra("json_data");
+            resultlist.add(jsonData);
 
             profile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -272,8 +268,6 @@
                             TextView titrescroll = new TextView(this);
                             titrescroll.setText(titre);
                             titrescroll.setTextSize(18);
-                            titrescroll.setTypeface(null, Typeface.BOLD);
-
 
                             TextView descriptionscroll = new TextView(this);
                             descriptionscroll.setText(description);
@@ -312,45 +306,6 @@
                     e.printStackTrace();
                 }
             }
-            commmentaire.setOnClickListener(view -> {
-                String commentText = comsent.getText().toString().trim();
-
-                if (commentText.isEmpty()) {
-                    comsent.setError("Please enter a comment");
-                    return;
-                }
-
-                LinearLayout layout2 = new LinearLayout(acceuil.this);
-                layout2.setOrientation(LinearLayout.VERTICAL);
-                layout2.setPadding(16, 16, 16, 16);
-
-                layout2.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                ));
-
-                TextView commentLabel = new TextView(acceuil.this);
-                commentLabel.setText("comment by "+username);
-                commentLabel.setTextSize(12);
-                commentLabel.setPadding(0, 0, 0, 8);
-
-                TextView descriptionscroll = new TextView(acceuil.this);
-                descriptionscroll.setText(commentText);
-                descriptionscroll.setTextSize(15);
-                descriptionscroll.setBackgroundResource(R.drawable.box_shadow_com);
-                descriptionscroll.setPadding(10, 10, 10, 10);
-
-                layout2.addView(commentLabel);
-                layout2.addView(descriptionscroll);
-
-
-                scroll2.addView(layout2);
-
-                comsent.setText("");
-            });
-
-
-
         }
         private class likedislike extends AsyncTask<String, Void, String> {
             private String type;
@@ -398,7 +353,6 @@
                 }
                 return  null;
 
-
             }
 
             private String executeHttpRequest(String urlWithParams, String data) throws IOException {
@@ -432,12 +386,19 @@
             protected void onPostExecute(String result) {
 
 
-                resultlist.add(result);
-                if ("favorite".equals(type)) {
+              resultlist.add(result);
+              if ("favorite".equals(type)) {
                     Intent fav = new Intent(acceuil.this, favorite.class);
                     fav.putExtra("json_data", result);
                     startActivity(fav);
                 }
+              else{
+                  AlertDialog alertDialog = new AlertDialog.Builder(acceuil.this).create();
+                  alertDialog.setTitle("Like & dislike");
+
+                  alertDialog.setMessage(result);
+                  alertDialog.show();
+              }
 
 
 
